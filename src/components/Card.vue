@@ -8,16 +8,19 @@
     <div class="content">
       <h2>{{ header }}</h2>
       <p>{{ description }}</p>
+      <slot></slot>
       <div class="buttons">
         <Button
           type="primary"
           @click="$emit('clickPrimary')"
           :text="primaryOpt"
+          v-if="primaryOpt"
         />
         <Button
           type="secondary"
           @click="$emit('clickSecondary')"
           :text="secondaryOpt"
+          v-if="secondaryOpt"
         />
       </div>
     </div>

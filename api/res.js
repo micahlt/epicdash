@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
     });
     const page = await context.newPage();
     await page.goto(req.query.url);
-    page.on("domcontentloaded", () => {
+    page.on("domcontentloaded", await () => {
       setTimeout(async () => {
         const buffer = await page.screenshot({ fullPage: true, type: "jpeg" });
         res.setHeader("Content-Type", "text/plain");

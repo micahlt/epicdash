@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   transition: 0.1s;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .dark {
@@ -25,7 +26,7 @@
   --a-source: #f83f5b;
   --a-lighter: #41000b;
   --a-light: #bd0636;
-  --a-dark: #bd0636;
+  --a-dark: hsl(344, 74%, 78%);
   --a-darker: #ffdadc;
   --bg-1: #fffbfd;
   --bg-2: #ffd8e4;
@@ -36,4 +37,28 @@
   --outline: #938f99;
   --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   --shadow-2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  justify-content: start;
+}
+
+@media only screen and (max-width: 1490px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 830px) {
+  .card-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media only screen and (max-width: 675px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
 }

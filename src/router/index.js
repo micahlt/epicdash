@@ -15,6 +15,10 @@ const routes = [
     component: () => import("../views/SitesPage.vue"),
   },
   {
+    path: "/portals",
+    component: () => import("../views/PortalsPage.vue"),
+  },
+  {
     path: "/settings",
     component: () => import("../views/SettingsPage.vue"),
   },

@@ -2,8 +2,12 @@
   <div class="full">
     <h1>Settings</h1>
     <div class="option">
-      <Switch @change="changeTheme($event)" :initial="defaultSwitch" />
+      <Switch @change="changeTheme($event)" :initial="currentTheme" />
       <p>Dark theme</p>
+    </div>
+    <div class="option">
+      <Switch @change="cacheAssets($event)" :initial="assetsCached" />
+      <p>Disable asset caching</p>
     </div>
   </div>
 </template>
@@ -19,6 +23,7 @@ h1 {
   display: grid;
   grid-template-columns: 4rem auto;
   align-items: center;
+  margin-bottom: 1rem;
 }
 </style>
 <script>
@@ -45,10 +50,28 @@ export default {
         }
       }
     },
+    cacheAssets(e) {
+      if (!localStorage.getItem("disable-caching")) {
+        localStorage.setItem("disable-caching", "true");
+      } else {
+        if (localStorage.getItem("disable-caching") == "true") {
+          localStorage.setItem("disable-caching", "false");
+        } else {
+          localStorage.setItem("disable-caching", "true");
+        }
+      }
+    },
   },
   computed: {
-    defaultSwitch() {
+    currentTheme() {
       if (window.localStorage.getItem("theme") == "dark") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    assetsCached() {
+      if (window.localStorage.getItem("disable-caching") == "true") {
         return true;
       } else {
         return false;

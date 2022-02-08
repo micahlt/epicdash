@@ -74,8 +74,16 @@ export default {
   transform: translateY(0.5%);
 }
 
+@media only screen and (max-width: 675px) {
+  .fade-enter-from,
+  .fade-leave-to {
+    transform: translateX(0.8%);
+  }
+}
+
 .view {
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* width */
@@ -96,5 +104,15 @@ export default {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+@media only screen and (max-width: 675px) {
+  .parent {
+    grid-template-columns: auto;
+    grid-template-rows: auto 4.5rem;
+  }
+  .view {
+    grid-row: 1 / 2;
+  }
 }
 </style>

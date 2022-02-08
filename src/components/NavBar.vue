@@ -18,6 +18,13 @@
       <span class="label">Sites</span>
     </router-link>
     <router-link
+      to="/portals"
+      :class="{ tab: true, selected: currentRoute == '/portals' }"
+    >
+      <span class="material-icons-outlined">work_outline</span><br />
+      <span class="label">Portals</span>
+    </router-link>
+    <router-link
       to="/settings"
       :class="{ tab: true, selected: currentRoute == '/settings' }"
     >
@@ -92,6 +99,24 @@ nav:hover .tab.selected span:first-child {
   color: var(--bg-1);
   width: 50%;
   border-radius: calc(1rem + 0.2rem);
+}
+
+@media only screen and (max-width: 675px) {
+  nav {
+    padding-top: 0;
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    height: 100%;
+    box-shadow: var(--shadow-1);
+  }
+
+  .fab {
+    display: none;
+  }
+
+  .tab {
+    margin-top: 1rem;
+  }
 }
 </style>
 <script>
