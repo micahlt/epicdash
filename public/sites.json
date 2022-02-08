@@ -1,0 +1,64 @@
+{
+  "array": [
+    {
+      "title": "Adrien's Supermarket",
+      "url": "https://www.adrienssupermarket.com/"
+    },
+    {
+      "title": "Bill's Cashsaver",
+      "url": "https://billscashsaver.com/"
+    },
+    {
+      "title": "Bill's Cost Plus",
+      "url": "https://billscostplus.com/"
+    },
+    {
+      "title": "Cashsaver South",
+      "url": "https://www.cashsaversouth.com/"
+    },
+    {
+      "title": "Epic Cybernetics",
+      "url": "https://epiccybernetics.com/"
+    },
+    {
+      "title": "Fasullo's Piggly Wiggly",
+      "url": "https://wegopig.com/"
+    },
+    {
+      "title": "Food Giant",
+      "url": "https://shopfoodgiant.com/"
+    },
+    {
+      "title": "High Point Grocery",
+      "url": "https://highpointgrocerystore.com/"
+    },
+    {
+      "title": "Mac's Fresh Market",
+      "url": "https://macsfreshmarket.com/"
+    },
+    {
+      "title": "Market Place Grocery",
+      "url": "https://marketplacegrocery.com/"
+    },
+    {
+      "title": "Pig Perks",
+      "url": "https://gotopigperks.com/"
+    },
+    {
+      "title": "Piggly Wiggly LA South",
+      "url": "https://www.gotothepig.com/"
+    },
+    {
+      "title": "Piggly Wiggly FL South",
+      "url": "https://pigglywigglysouth.com/"
+    },
+    {
+      "title": "Save-A-Lot SW Florida",
+      "url": "https://savealotswfl.com/"
+    },
+    {
+      "title": "Splash and Dash",
+      "url": "https://splashndashdecatur.com/"
+    }
+  ]
+}

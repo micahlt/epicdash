@@ -7,11 +7,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vercel/node": "^1.12.1",
+    "chrome-aws-lambda": "^10.1.0",
+    "playwright-core": "^1.18.1",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",
+    "playwright": "^1.18.1",
     "vite": "^2.7.2"
   }
 }

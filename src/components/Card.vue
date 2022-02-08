@@ -3,14 +3,22 @@
     <div
       class="image"
       v-if="imageUrl != 'none'"
-      :style="{ 'background-image': `url(${imageUrl})` }"
+      :style="{ 'background-image': imageUrl }"
     ></div>
     <div class="content">
       <h2>{{ header }}</h2>
       <p>{{ description }}</p>
       <div class="buttons">
-        <a href="#" @click="$emit('clickPrimary')">{{ primaryOpt }}</a>
-        <a href="#" @click="$emit('clickSecondary')">{{ secondaryOpt }}</a>
+        <Button
+          type="primary"
+          @click="$emit('clickPrimary')"
+          :text="primaryOpt"
+        />
+        <Button
+          type="secondary"
+          @click="$emit('clickSecondary')"
+          :text="secondaryOpt"
+        />
       </div>
     </div>
   </div>
@@ -35,11 +43,12 @@
   width: calc(100% + 2em);
   height: 10rem;
   margin: -1rem;
-  background-size: cover;
+  background-size: cover !important;
+  background-repeat: no-repeat;
   border-radius: 0.75rem;
 }
 
-.content {
+div.image ~ .content {
   padding-top: 2rem;
 }
 
@@ -54,41 +63,16 @@ p {
   grid-template-columns: auto auto;
   width: max-content;
 }
-
-a {
-  display: block;
-  text-decoration: none;
-  width: max-content;
-  padding: 0.625rem 1.4rem;
-  border-radius: 1.625rem;
-  color: var(--a-light);
-}
-
-a:first-of-type {
-  color: var(--a-darker);
-  background: var(--a-light);
-}
-
-a:first-of-type {
-  background-position: center;
-  transition: background 0.65s;
-}
-
-a:first-of-type:hover {
-  background: var(--a-lighter)
-    radial-gradient(circle, transparent 1%, var(--a-lighter) 1%) center/15000%;
-}
-a:first-of-type:active {
-  background-color: var(--a-light);
-  background-size: 100%;
-  transition: background 0s;
-}
 </style>
 
 <script>
+import Button from "./Button.vue";
 export default {
   name: "Card",
   emits: ["clickPrimary", "clickSecondary"],
+  components: {
+    Button,
+  },
   props: {
     header: String,
     description: String,

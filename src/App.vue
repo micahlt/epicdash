@@ -1,15 +1,47 @@
-<script setup>
+<script>
 import NavBar from "./components/NavBar.vue";
+export default {
+  name: "App",
+  components: {
+    NavBar,
+  },
+  methods: {
+    setTheme(theme) {
+      console.log("setting theme to", theme);
+      if (theme == "dark") {
+        window.localStorage.setItem("theme", "dark");
+        document.getElementsByTagName("html")[0].classList.remove("light");
+        document.getElementsByTagName("html")[0].classList.add("dark");
+      } else {
+        window.localStorage.setItem("theme", "light");
+        document.getElementsByTagName("html")[0].classList.remove("dark");
+        document.getElementsByTagName("html")[0].classList.add("light");
+      }
+    },
+  },
+  beforeMount() {
+    if (
+      matchMedia("prefers-color-scheme: dark") &&
+      localStorage.getItem("theme") != "light"
+    ) {
+      this.setTheme("dark");
+    } else {
+      this.setTheme("light");
+    }
+  },
+};
 </script>
 
 <template>
   <div class="parent">
     <NavBar />
-    <router-view v-slot="{ Component }">
-      <transition name="fade" mode="out-in">
-        <component :is="Component" />
-      </transition>
-    </router-view>
+    <div class="view">
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" @switchTheme="setTheme($event)" />
+        </transition>
+      </router-view>
+    </div>
   </div>
 </template>
 
@@ -40,5 +72,29 @@ import NavBar from "./components/NavBar.vue";
 .fade-leave-to {
   opacity: 0;
   transform: translateY(0.5%);
+}
+
+.view {
+  overflow-y: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--txt-2);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>
