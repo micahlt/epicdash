@@ -9,6 +9,9 @@
       <Switch @change="cacheAssets($event)" :initial="assetsCached" />
       <p>Disable asset caching</p>
     </div>
+    <div class="option">
+      <Button text="Log In" />
+    </div>
   </div>
 </template>
 <style scoped>
@@ -28,10 +31,12 @@ h1 {
 </style>
 <script>
 import Switch from "../components/Switch.vue";
+import Button from "../components/Button.vue";
 export default {
   name: "SettingsPage",
   components: {
     Switch,
+    Button,
   },
   methods: {
     changeTheme(e) {
