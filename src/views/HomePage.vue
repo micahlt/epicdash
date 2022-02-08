@@ -6,7 +6,7 @@
       description="Epic Dashboard is a one-stop shop for all the info regarding our digital marketing solutions."
       primaryOpt="Sites"
       secondaryOpt="Settings"
-      imageUrl="https://images.unsplash.com/photo-1638913660695-b490171d17c9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80"
+      imageUrl="url('https://images.unsplash.com/photo-1638913660695-b490171d17c9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80')"
       @clickPrimary="$router.push('/sites')"
       @clickSecondary="$router.push('/settings')"
     />

@@ -76,7 +76,7 @@ export default {
           "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important" ||
         !this.sites[index].img
       ) {
-        let res = await fetch(`http://localhost:8080/api/res.js?url=${url}`);
+        let res = await fetch(`/api/res.js?url=${url}`);
         let text = await res.text();
         this.sites[index].img = `url(${text})`;
       }
