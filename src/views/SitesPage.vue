@@ -127,7 +127,7 @@ export default {
   },
   async mounted() {
     let sites = await fetch(
-      `/api/sites.js?token=${encodeURI(
+      `/api/sites.js?token=${encodeURIComponent(
         window.localStorage.getItem("authToken")
       )}`
     );
