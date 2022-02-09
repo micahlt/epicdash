@@ -126,7 +126,9 @@ export default {
     },
   },
   async mounted() {
-    let sites = await fetch("/sites.json");
+    let sites = await fetch(
+      `/api/sites.js?token=${window.localStorage.getItem("authToken")}`
+    );
     sites = await sites.json();
     this.sites = sites.all;
     console.log(sites);

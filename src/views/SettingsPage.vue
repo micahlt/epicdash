@@ -10,7 +10,7 @@
       <p>Disable asset caching</p>
     </div>
     <div class="option">
-      <Button text="Log In" />
+      <Button text="Log In" @click="logIn" />
     </div>
   </div>
 </template>
@@ -65,6 +65,17 @@ export default {
           localStorage.setItem("disable-caching", "true");
         }
       }
+    },
+    logIn() {
+      let pwd = prompt("Enter your password:");
+      fetch(`/api/login?password=${pwd}`)
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          window.localStorage.setItem("authToken", data.token);
+          window.location.reload();
+        });
     },
   },
   computed: {
