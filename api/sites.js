@@ -1,6 +1,6 @@
 module.exports = async (req, res) => {
   const tokens = process.env.ALLOWED_TOKENS.split("|");
-  if (tokens.includes(decodeURI(req.query.token))) {
+  if (tokens.includes(decodeURIComponent(req.query.token))) {
     res.json({
       all: [
         {
