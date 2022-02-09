@@ -1,7 +1,7 @@
 module.exports = async (req, res) => {
   const tokens = process.env.ALLOWED_TOKENS.split("|");
   if (tokens.includes(decodeURI(req.query.token))) {
-    return {
+    res.json({
       all: [
         {
           title: "Adrien's Supermarket",
@@ -104,6 +104,6 @@ module.exports = async (req, res) => {
           labels: ["all"],
         },
       ],
-    };
+    });
   }
 };
