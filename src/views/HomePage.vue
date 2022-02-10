@@ -17,6 +17,14 @@
         primaryOpt="Log In"
         imageUrl="url('/keys-image.png')"
         @clickPrimary="$router.push('/settings')"
+        v-if="!loggedIn"
+      />
+      <Card
+        v-else
+        :header="signedInMessage"
+        description="You're currently signed in."
+        primaryOpt="Log Out"
+        @clickPrimary="logOut"
       />
     </div>
   </div>
@@ -45,6 +53,21 @@ export default {
   methods: {
     log(t) {
       console.log(t);
+    },
+  },
+  computed: {
+    loggedIn() {
+      if (
+        window.localStorage.getItem("username") &&
+        window.localStorage.getItem("token")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    signedInMessage() {
+      return `Hi there, ${window.localStorage.getItem("username")}`;
     },
   },
 };

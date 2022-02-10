@@ -24,6 +24,7 @@
             name="username"
             v-model="username"
             placeholder="Username"
+            @keyup.enter="logIn"
           />
           <br />
           <input
@@ -31,6 +32,7 @@
             name="password"
             v-model="password"
             placeholder="Password"
+            @keyup.enter="logIn"
           />
           <br />
           <Button text="Log In" @click="logIn" />
@@ -225,6 +227,9 @@ export default {
       } else {
         return false;
       }
+    },
+    signedInMessage() {
+      return `Hello, ${window.localStorage.getItem("username")}`;
     },
   },
 };
