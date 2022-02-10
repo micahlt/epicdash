@@ -55,6 +55,11 @@ export default {
     log(t) {
       console.log(t);
     },
+    logOut() {
+      window.localStorage.removeItem("username");
+      window.localStorage.removeItem("token");
+      window.location.reload();
+    },
   },
   computed: {
     loggedIn() {
