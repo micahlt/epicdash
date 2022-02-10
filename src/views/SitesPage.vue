@@ -123,7 +123,7 @@ export default {
     async siteImage(url, index, offset) {
       if (!offset) {
         console.log("Resetting fetch offset");
-        offset = 0;
+        offset = 4000;
       }
       if (
         this.sites[index].img ==
@@ -137,8 +137,8 @@ export default {
           this.sites[index].img = `url(${text})`;
         } else {
           setTimeout(() => {
-            console.log("Fetch failed, offset is,", offset + 2000);
-            this.siteImage(url, index, offset + 2000);
+            console.log("Fetch failed, offset is,", offset * 3);
+            this.siteImage(url, index, offset * 3);
           }, offset);
         }
       }
