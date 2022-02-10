@@ -120,15 +120,24 @@ export default {
     go(url) {
       window.open(url);
     },
-    async siteImage(url, index) {
+    async siteImage(url, index, offset) {
+      if (!offset) {
+        offset = 0;
+      }
       if (
         this.sites[index].img ==
           "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important" ||
         !this.sites[index].img
       ) {
         let res = await fetch(`https://epicdash.vercel.app/api/res?url=${url}`);
-        let text = await res.text();
-        this.sites[index].img = `url(${text})`;
+        if (res.ok) {
+          let text = await res.text();
+          this.sites[index].img = `url(${text})`;
+        } else {
+          setTimeout(() => {
+            this.siteImage(url, index, offset + 2000);
+          }, offset);
+        }
       }
     },
   },
@@ -139,43 +148,22 @@ export default {
           "username"
         )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
       );
-      if (sites.ok) {
-        sites = await sites.json();
-        this.sites = sites.all;
-        console.log(sites);
-        this.sites.forEach((site, i) => {
-          if (!site.img) {
-            this.sites[i].img =
-              "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important";
-          }
-        });
-        let i = 0;
-        this.interval = setInterval(() => {
-          let obj = this.sites[i];
-          this.siteImage(obj.url, i);
-          i++;
-          if (i === this.sites.length) clearInterval(this.interval);
-        }, 10);
-      } else {
-        let offset = 2000;
-        const fetchUntilFetched = () => {
-          setTimeout(() => {
-            fetch(
-              `/api/sites?username=${window.localStorage.getItem(
-                "username"
-              )}&token=${encodeURIComponent(
-                window.localStorage.getItem("token")
-              )}`
-            ).then((res) => {
-              if (!res.ok) {
-                offset = offset * 2;
-                fetchUntilFetched();
-              }
-            });
-          }, offset);
-        };
-        fetchUntilFetched();
-      }
+      sites = await sites.json();
+      this.sites = sites.all;
+      console.log(sites);
+      this.sites.forEach((site, i) => {
+        if (!site.img) {
+          this.sites[i].img =
+            "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important";
+        }
+      });
+      let i = 0;
+      this.interval = setInterval(() => {
+        let obj = this.sites[i];
+        this.siteImage(obj.url, i);
+        i++;
+        if (i === this.sites.length) clearInterval(this.interval);
+      }, 10);
     }
   },
   beforeUnmount() {
