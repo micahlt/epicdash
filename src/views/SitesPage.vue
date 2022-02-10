@@ -157,15 +157,23 @@ export default {
           if (i === this.sites.length) clearInterval(this.interval);
         }, 10);
       } else {
-        setTimeout(() => {
-          fetch(
-            `/api/sites?username=${window.localStorage.getItem(
-              "username"
-            )}&token=${encodeURIComponent(
-              window.localStorage.getItem("token")
-            )}`
-          );
-        }, 2000);
+        let offset = 2000;
+        const fetchUntilFetched = () => {
+          setTimeout(() => {
+            fetch(
+              `/api/sites?username=${window.localStorage.getItem(
+                "username"
+              )}&token=${encodeURIComponent(
+                window.localStorage.getItem("token")
+              )}`
+            ).then((res) => {
+              if (!res.ok) {
+                offset = offset * 2;
+                fetchUntilFetched();
+              }
+            });
+          }, offset);
+        };
       }
     }
   },

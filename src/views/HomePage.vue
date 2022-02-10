@@ -24,6 +24,7 @@
         :header="signedInMessage"
         description="You're currently signed in."
         primaryOpt="Log Out"
+        imageUrl="conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important"
         @clickPrimary="logOut"
       />
     </div>
