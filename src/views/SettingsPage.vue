@@ -190,7 +190,7 @@ export default {
           }
         })
         .then((data) => {
-          window.localStorage.setItem("username", usr);
+          window.localStorage.setItem("username", this.username);
           window.localStorage.setItem("token", data.token);
           window.location.reload();
         });
