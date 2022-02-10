@@ -42,6 +42,7 @@ h1 {
 :deep(.card) {
   margin-right: 1rem;
   margin-bottom: 1rem;
+  height: max-content;
 }
 </style>
 <script>

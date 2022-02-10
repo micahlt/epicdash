@@ -122,6 +122,7 @@ export default {
     },
     async siteImage(url, index, offset) {
       if (!offset) {
+        console.log("Resetting fetch offset");
         offset = 0;
       }
       if (
@@ -129,12 +130,14 @@ export default {
           "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important" ||
         !this.sites[index].img
       ) {
-        let res = await fetch(`https://epicdash.vercel.app/api/res?url=${url}`);
+        let res = await fetch(`/api/res?url=${url}`);
+
         if (res.ok) {
           let text = await res.text();
           this.sites[index].img = `url(${text})`;
         } else {
           setTimeout(() => {
+            console.log("Fetch failed, offset is,", offset + 2000);
             this.siteImage(url, index, offset + 2000);
           }, offset);
         }
