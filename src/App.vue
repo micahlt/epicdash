@@ -28,17 +28,19 @@ export default {
     } else {
       this.setTheme("light");
     }
-    fetch(
-      `/api/authcheck?username=${window.localStorage.getItem(
-        "username"
-      )}&token=${window.localStorage.getItem("token")}`
-    ).then((res) => {
-      if (!res.ok) {
-        window.localStorage.removeItem("username");
-        window.localStorage.removeItem("token");
-        window.location.reload();
-      }
-    });
+    if (window.localStorage.getItem("username")) {
+      fetch(
+        `/api/authcheck?username=${window.localStorage.getItem(
+          "username"
+        )}&token=${window.localStorage.getItem("token")}`
+      ).then((res) => {
+        if (!res.ok) {
+          window.localStorage.removeItem("username");
+          window.localStorage.removeItem("token");
+          window.location.reload();
+        }
+      });
+    }
   },
 };
 </script>
