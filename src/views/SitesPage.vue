@@ -117,9 +117,7 @@ export default {
           "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important" ||
         !this.sites[index].img
       ) {
-        let res = await fetch(
-          `https://epicdash.vercel.app/api/res.js?url=${url}`
-        );
+        let res = await fetch(`https://epicdash.vercel.app/api/res?url=${url}`);
         let text = await res.text();
         this.sites[index].img = `url(${text})`;
       }
@@ -127,9 +125,9 @@ export default {
   },
   async mounted() {
     let sites = await fetch(
-      `/api/sites.js?token=${encodeURIComponent(
-        window.localStorage.getItem("authToken")
-      )}`
+      `/api/sites.js?username=${window.localStorage.getItem(
+        "username"
+      )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
     );
     sites = await sites.json();
     this.sites = sites.all;

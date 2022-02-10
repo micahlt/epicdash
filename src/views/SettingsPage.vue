@@ -67,13 +67,15 @@ export default {
       }
     },
     logIn() {
-      let pwd = prompt("Enter your password:");
-      fetch(`/api/login?password=${pwd}`)
+      let usr = window.prompt("Enter your username:");
+      let pwd = window.prompt("Enter your password:");
+      fetch(`/api/login?username=${usr}&password=${pwd}`)
         .then((res) => {
           return res.json();
         })
         .then((data) => {
-          window.localStorage.setItem("authToken", data.token);
+          window.localStorage.setItem("username", usr);
+          window.localStorage.setItem("token", data.token);
           window.location.reload();
         });
     },

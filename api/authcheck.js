@@ -23,23 +23,14 @@ module.exports = async (req, res) => {
           return;
         }
         if (results.length > 0) {
-          let tokens = results[0].tokens;
+          let tokens = results[0].tokens.split(",");
           if (tokens.includes(req.query.token)) {
-            connection.query(`SELECT * FROM sites`, (err, sites) => {
-              let resArray = sites.map((v) => Object.assign({}, v));
-              resArray.forEach((site) => {
-                site.labels = site.labels.split(",");
-                site.labels.pop();
-              });
-              res.status(200).json({
-                all: resArray,
-              });
-            });
+            res.status(200).send(200);
           } else {
             res.status(400).send(400);
           }
         } else {
-          res.status(400).send(400);
+          res.send(400).send(400);
         }
       }
     );
