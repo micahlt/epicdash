@@ -139,22 +139,34 @@ export default {
           "username"
         )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
       );
-      sites = await sites.json();
-      this.sites = sites.all;
-      console.log(sites);
-      this.sites.forEach((site, i) => {
-        if (!site.img) {
-          this.sites[i].img =
-            "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important";
-        }
-      });
-      let i = 0;
-      this.interval = setInterval(() => {
-        let obj = this.sites[i];
-        this.siteImage(obj.url, i);
-        i++;
-        if (i === this.sites.length) clearInterval(this.interval);
-      }, 10);
+      if (sites.ok) {
+        sites = await sites.json();
+        this.sites = sites.all;
+        console.log(sites);
+        this.sites.forEach((site, i) => {
+          if (!site.img) {
+            this.sites[i].img =
+              "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important";
+          }
+        });
+        let i = 0;
+        this.interval = setInterval(() => {
+          let obj = this.sites[i];
+          this.siteImage(obj.url, i);
+          i++;
+          if (i === this.sites.length) clearInterval(this.interval);
+        }, 10);
+      } else {
+        setTimeout(() => {
+          fetch(
+            `/api/sites?username=${window.localStorage.getItem(
+              "username"
+            )}&token=${encodeURIComponent(
+              window.localStorage.getItem("token")
+            )}`
+          );
+        }, 2000);
+      }
     }
   },
   beforeUnmount() {
