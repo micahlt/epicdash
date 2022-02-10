@@ -22,14 +22,14 @@
           <input
             type="text"
             name="username"
-            v-bind="username"
+            v-model="username"
             placeholder="Username"
           />
           <br />
           <input
             type="password"
             name="password"
-            v-bind="password"
+            v-model="password"
             placeholder="Password"
           />
           <br />
