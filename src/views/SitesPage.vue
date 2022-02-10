@@ -137,8 +137,8 @@ export default {
           this.sites[index].img = `url(${text})`;
         } else {
           setTimeout(() => {
-            console.log("Fetch failed, offset is,", offset * 3);
-            this.siteImage(url, index, offset * 3);
+            console.log("Fetch failed, offset is,", offset * 2);
+            this.siteImage(url, index, offset * 2);
           }, offset);
         }
       }
