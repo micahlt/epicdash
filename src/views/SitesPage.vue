@@ -2,12 +2,12 @@
   <div class="full">
     <h1>
       Sites
-      <div class="sync-notifier">
+      <div v-if="loggedIn" class="sync-notifier">
         <p>refreshing thumbnails</p>
         <span class="material-icons-outlined">sync</span>
       </div>
     </h1>
-    <div class="chips">
+    <div class="chips" v-if="loggedIn">
       <Chip
         :icon="selected == 'll' ? 'check_circle' : 'circle'"
         text="Loyalty Lane"
@@ -32,6 +32,15 @@
         @clickPrimary="go(s.url)"
         secondaryOpt="WP Admin"
         @clickSecondary="go(s.url + 'wp-admin')"
+      />
+    </div>
+    <div class="unauth-parent" v-if="!loggedIn">
+      <Card
+        header="You're a guest"
+        description="Please sign in to access sensitive information or perform administrator actions like creating sites."
+        primaryOpt="Log In"
+        imageUrl="url('/keys-image.png')"
+        @clickPrimary="$router.push('/settings')"
       />
     </div>
   </div>
@@ -124,30 +133,44 @@ export default {
     },
   },
   async mounted() {
-    let sites = await fetch(
-      `/api/sites.js?username=${window.localStorage.getItem(
-        "username"
-      )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
-    );
-    sites = await sites.json();
-    this.sites = sites.all;
-    console.log(sites);
-    this.sites.forEach((site, i) => {
-      if (!site.img) {
-        this.sites[i].img =
-          "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important";
-      }
-    });
-    let i = 0;
-    this.interval = setInterval(() => {
-      let obj = this.sites[i];
-      this.siteImage(obj.url, i);
-      i++;
-      if (i === this.sites.length) clearInterval(this.interval);
-    }, 10);
+    if (this.loggedIn) {
+      let sites = await fetch(
+        `/api/sites?username=${window.localStorage.getItem(
+          "username"
+        )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
+      );
+      sites = await sites.json();
+      this.sites = sites.all;
+      console.log(sites);
+      this.sites.forEach((site, i) => {
+        if (!site.img) {
+          this.sites[i].img =
+            "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important";
+        }
+      });
+      let i = 0;
+      this.interval = setInterval(() => {
+        let obj = this.sites[i];
+        this.siteImage(obj.url, i);
+        i++;
+        if (i === this.sites.length) clearInterval(this.interval);
+      }, 10);
+    }
   },
   beforeUnmount() {
     clearInterval(this.interval);
+  },
+  computed: {
+    loggedIn() {
+      if (
+        window.localStorage.getItem("username") &&
+        window.localStorage.getItem("token")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
 };
 </script>

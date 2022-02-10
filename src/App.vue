@@ -85,6 +85,7 @@ export default {
 .fade-leave-to {
   opacity: 0;
   transform: translateY(0.5%);
+  transition-delay: 0.2s;
 }
 
 @media only screen and (max-width: 675px) {

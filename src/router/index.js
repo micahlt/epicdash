@@ -7,6 +7,14 @@ const routes = [
     redirect: "/home",
   },
   {
+    path: "/:pathMatch(.*)*",
+    redirect: "/404",
+  },
+  {
+    path: "/404",
+    component: () => import("../views/NotFoundPage.vue"),
+  },
+  {
     path: "/home",
     component: () => import("../views/HomePage.vue"),
   },
