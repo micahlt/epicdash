@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
             res.status(400).send(400);
           }
         } else {
-          res.send(400).send(400);
+          res.status(400).send(400);
         }
       }
     );
