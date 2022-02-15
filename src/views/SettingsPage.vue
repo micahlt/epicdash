@@ -131,7 +131,7 @@ export default {
     },
     logIn() {
       fetch(
-        `http://localhost:3000/api/login?username=${encodeURIComponent(
+        `/api/login?username=${encodeURIComponent(
           this.username
         )}&password=${encodeURIComponent(this.password)}`
       )
