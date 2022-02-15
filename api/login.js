@@ -38,6 +38,7 @@ module.exports = async (req, res) => {
           );
           res.status(200).json({
             token: newToken,
+            isAdmin: Boolean(results[0].admin),
           });
         } else {
           res.status(400).send(400);
