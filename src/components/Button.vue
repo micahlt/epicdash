@@ -15,6 +15,10 @@
 </template>
   
 <style scoped>
+.btn-parent {
+  width: max-content;
+}
+
 a {
   display: block;
   text-decoration: none;

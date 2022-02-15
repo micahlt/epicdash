@@ -60,7 +60,7 @@
             @keyup.enter="logIn"
           />
           <br />
-          <Button text="Log In" @click="logIn" />
+          <Button text="Log In" @click="logIn" class="login-btn" />
         </div>
         <Card
           v-else
@@ -131,7 +131,7 @@ export default {
     },
     logIn() {
       fetch(
-        `/api/login?username=${encodeURIComponent(
+        `http://localhost:3000/api/login?username=${encodeURIComponent(
           this.username
         )}&password=${encodeURIComponent(this.password)}`
       )
@@ -165,22 +165,22 @@ export default {
       sites = await sites.json();
       this.sites = sites.all;
     },
-    newSite(e) {
-      console.log(e);
+    newSite() {
       const site = {
         title: "New Site",
         new: true,
       };
       this.sites.push(site);
       this.selectedPage = site;
+      console.log(this.sites);
     },
     async saveChanges() {
+      let labels = ["all"],
+        labelsCsv = "";
+      labels.forEach((label) => {
+        labelsCsv += label + ",";
+      });
       if (this.selectedPage.new) {
-        let labels = ["all"],
-          labelsCsv = "";
-        labels.forEach((label) => {
-          labelsCsv += label + ",";
-        });
         let req = await fetch(
           `/api/add?username=${encodeURIComponent(
             window.localStorage.getItem("username")
@@ -194,6 +194,23 @@ export default {
         );
         if (await req.ok) {
           window.location.reload();
+        } else {
+          alert("There was an error, code", req.status);
+        }
+      } else {
+        let req = await fetch(
+          `/api/update?username=${encodeURIComponent(
+            window.localStorage.getItem("username")
+          )}&token=${encodeURIComponent(
+            window.localStorage.getItem("token")
+          )}&id=${this.selectedPage.id}&title=${encodeURIComponent(
+            this.selectedPage.title
+          )}&url=${encodeURIComponent(
+            this.selectedPage.url
+          )}&labels=${encodeURIComponent(labelsCsv)}`
+        );
+        if (await req.ok) {
+          alert("Successfully edited site.");
         } else {
           alert("There was an error, code", req.status);
         }
@@ -285,6 +302,11 @@ h1 {
 
 .login {
   max-width: 20rem;
+}
+
+.login-btn {
+  margin: auto;
+  margin-top: 1rem;
 }
 
 .login:hover,

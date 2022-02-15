@@ -98,3 +98,23 @@ Adds a new site to the database.  Returns a status code.
 | `401`      | invalid auth token        |
 | `400`      | missing query param       |
 | `200`      | successfully inserted row |
+
+## `/api/update`
+
+Edits an existing site in the database.  Returns a status code.
+
+| **Param** | **Value**                                   |
+| --------- | ------------------------------------------- |
+| username  | URI-encoded username                        |
+| token     | user token (from login)                     |
+| id        | the ID of the site to update                |
+| title     | URI-encoded title of site to update         |
+| url       | URI-encoded URL of site to update           |
+| labels    | URI-encoded, comma-separated list of labels |
+
+| **Status** | **Meaning**               |
+| ---------- | ------------------------- |
+| `500`      | error with MySQL database |
+| `401`      | invalid auth token        |
+| `400`      | missing query param       |
+| `200`      | successfully inserted row |
