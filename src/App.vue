@@ -113,6 +113,7 @@ export default {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: var(--txt-2);
+  border-radius: 5px;
 }
 
 /* Handle on hover */

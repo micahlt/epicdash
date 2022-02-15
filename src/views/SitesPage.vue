@@ -147,7 +147,7 @@ export default {
   async mounted() {
     if (this.loggedIn) {
       let sites = await fetch(
-        `/api/sites?username=${window.localStorage.getItem(
+        `https://dashboard.epicsolutions.com/api/sites?username=${window.localStorage.getItem(
           "username"
         )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
       );

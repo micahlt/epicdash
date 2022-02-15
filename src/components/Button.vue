@@ -1,15 +1,17 @@
 <template>
-  <a
-    v-if="mode == 'emitter'"
-    href="#"
-    @click.prevent="$emit('click')"
-    :class="type"
-    >{{ text }}</a
-  >
-  <router-link v-if="mode == 'router'" :to="to" :class="type">{{
-    text
-  }}</router-link>
-  <a v-if="mode == 'href'" :href="href" :class="type">{{ text }}</a>
+  <div class="btn-parent">
+    <a
+      v-if="mode == 'emitter'"
+      href="#"
+      @click.prevent="$emit('click')"
+      :class="type"
+      >{{ text }}</a
+    >
+    <router-link v-if="mode == 'router'" :to="to" :class="type">{{
+      text
+    }}</router-link>
+    <a v-if="mode == 'href'" :href="href" :class="type">{{ text }}</a>
+  </div>
 </template>
   
 <style scoped>

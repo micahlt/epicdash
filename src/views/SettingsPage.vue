@@ -3,6 +3,31 @@
     <h1>Settings</h1>
     <div class="settings-grid">
       <div class="options">
+        <div class="admin" v-if="loggedIn && isAdmin">
+          <div class="page-editor">
+            <div class="editor-header">
+              <Select
+                title="Edit page"
+                :options="sites"
+                @change="selectedPage = $event"
+              />
+              <Button text="New Page" @click="newSite()" type="outline" />
+            </div>
+            <input
+              type="text"
+              name="title"
+              v-model="selectedPage.title"
+              placeholder="Title"
+            />
+            <input
+              type="text"
+              name="url"
+              v-model="selectedPage.url"
+              placeholder="URL"
+            />
+            <Button text="Save" @click="saveChanges()" class="save" />
+          </div>
+        </div>
         <div class="option">
           <Switch @change="changeTheme($event)" :initial="currentTheme" />
           <p>Dark theme</p>
@@ -48,6 +73,144 @@
     </div>
   </div>
 </template>
+<script>
+import Switch from "../components/Switch.vue";
+import Button from "../components/Button.vue";
+import Card from "../components/Card.vue";
+import Select from "../components/Select.vue";
+export default {
+  name: "SettingsPage",
+  components: {
+    Switch,
+    Button,
+    Card,
+    Select,
+  },
+  data() {
+    return {
+      username: "",
+      password: "",
+      sites: [],
+      selectedPage: {
+        title: "",
+      },
+    };
+  },
+  mounted() {
+    if (Boolean(localStorage.getItem("admin"))) {
+      this.getSites();
+    }
+  },
+  methods: {
+    changeTheme(e) {
+      if (!localStorage.getItem("theme")) {
+        console.log("previously unset theme");
+        if (matchMedia("prefers-color-scheme: dark")) {
+          this.$emit("switchTheme", "light");
+        } else {
+          this.$emit("switchTheme", "dark");
+        }
+      } else {
+        if (localStorage.getItem("theme") == "dark") {
+          this.$emit("switchTheme", "light");
+        } else {
+          this.$emit("switchTheme", "dark");
+        }
+      }
+    },
+    cacheAssets(e) {
+      if (!localStorage.getItem("disable-caching")) {
+        localStorage.setItem("disable-caching", "true");
+      } else {
+        if (localStorage.getItem("disable-caching") == "true") {
+          localStorage.setItem("disable-caching", "false");
+        } else {
+          localStorage.setItem("disable-caching", "true");
+        }
+      }
+    },
+    logIn() {
+      fetch(
+        `https://dashboard.epicsolutions.com/api/login?username=${this.username}&password=${this.password}`
+      )
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            alert("Please try again - error " + res.status);
+          }
+        })
+        .then((data) => {
+          window.localStorage.setItem("username", this.username);
+          window.localStorage.setItem("admin", data.isAdmin);
+          window.localStorage.setItem("token", data.token);
+          window.location.reload();
+        });
+    },
+    logOut() {
+      window.localStorage.removeItem("username");
+      window.localStorage.removeItem("admin");
+      window.localStorage.removeItem("token");
+      window.location.reload();
+    },
+    async getSites() {
+      console.log("getting sites");
+      let sites = await fetch(
+        `https://dashboard.epicsolutions.com/api/sites?username=${window.localStorage.getItem(
+          "username"
+        )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
+      );
+      sites = await sites.json();
+      this.sites = sites.all;
+    },
+    newSite(e) {
+      console.log(e);
+      const site = {
+        title: "New Site",
+      };
+      this.sites.push(site);
+      this.selectedPage = site;
+    },
+  },
+  computed: {
+    currentTheme() {
+      if (window.localStorage.getItem("theme") == "dark") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    assetsCached() {
+      if (window.localStorage.getItem("disable-caching") == "true") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    loggedIn() {
+      if (
+        window.localStorage.getItem("username") &&
+        window.localStorage.getItem("token")
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isAdmin() {
+      if (window.localStorage.getItem("admin") == "true") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    signedInMessage() {
+      return `Hello, ${window.localStorage.getItem("username")}`;
+    },
+  },
+};
+</script>
+
 <style scoped>
 h1 {
   margin-bottom: 1rem;
@@ -83,48 +246,56 @@ h1 {
   padding-left: 1rem;
 }
 
-.login {
+.login,
+.page-editor {
   background: var(--bg-2);
   padding: 1rem;
   border-radius: 0.75rem;
-  overflow: hidden;
   box-shadow: var(--shadow-1);
   transition: box-shadow 0.2s;
+}
+
+.login {
   max-width: 20rem;
 }
 
-.login:hover {
+.login:hover,
+.page-editor:hover {
   box-shadow: var(--shadow-2);
 }
 
-.login input {
+input[type="text"],
+input[type="password"] {
   border: 2px solid transparent;
   border-bottom: 2px solid var(--bg-1);
+  width: calc(100% - 1.5rem);
   font-size: 1rem;
   padding: 0.5rem;
   padding-top: 1.25rem;
-  width: calc(100% - 1.5rem);
-  background: var(--bg-2);
+  background: transparent;
   color: var(--txt-1);
   font-family: inherit;
   outline: none;
   position: relative;
 }
 
-.login input::placeholder {
-  color: var(--bg-1);
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+  color: var(--txt-2);
   position: absolute;
   transition: 0.2s;
   top: 1.25rem;
   left: 0.3rem;
 }
 
-.login input:focus-within {
+input[type="text"]:focus-within,
+input[type="password"]:focus-within {
   border-bottom: 2px solid var(--a-light);
   overflow: visible;
 }
 
-.login input:focus-within::placeholder {
+input[type="text"]:focus-within::placeholder,
+input[type="password"]:focus-within::placeholder {
   transition: 0.1s;
   top: 0rem;
   left: -0.3rem;
@@ -132,106 +303,35 @@ h1 {
   color: var(--txt-1);
 }
 
-:deep(a) {
+.login > :deep(a.primary) {
   margin: auto;
   margin-top: 1rem;
 }
-</style>
-<script>
-import Switch from "../components/Switch.vue";
-import Button from "../components/Button.vue";
-import Card from "../components/Card.vue";
-export default {
-  name: "SettingsPage",
-  components: {
-    Switch,
-    Button,
-    Card,
-  },
-  data() {
-    return {
-      username: "",
-      password: "",
-    };
-  },
-  methods: {
-    changeTheme(e) {
-      if (!localStorage.getItem("theme")) {
-        console.log("previously unset theme");
-        if (matchMedia("prefers-color-scheme: dark")) {
-          this.$emit("switchTheme", "light");
-        } else {
-          this.$emit("switchTheme", "dark");
-        }
-      } else {
-        if (localStorage.getItem("theme") == "dark") {
-          this.$emit("switchTheme", "light");
-        } else {
-          this.$emit("switchTheme", "dark");
-        }
-      }
-    },
-    cacheAssets(e) {
-      if (!localStorage.getItem("disable-caching")) {
-        localStorage.setItem("disable-caching", "true");
-      } else {
-        if (localStorage.getItem("disable-caching") == "true") {
-          localStorage.setItem("disable-caching", "false");
-        } else {
-          localStorage.setItem("disable-caching", "true");
-        }
-      }
-    },
-    logIn() {
-      fetch(`/api/login?username=${this.username}&password=${this.password}`)
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          } else {
-            alert("Please try again - error " + res.status);
-          }
-        })
-        .then((data) => {
-          window.localStorage.setItem("username", this.username);
-          window.localStorage.setItem("token", data.token);
-          window.location.reload();
-        });
-    },
-    logOut() {
-      window.localStorage.removeItem("username");
-      window.localStorage.removeItem("token");
-      window.location.reload();
-    },
-  },
-  computed: {
-    currentTheme() {
-      if (window.localStorage.getItem("theme") == "dark") {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    assetsCached() {
-      if (window.localStorage.getItem("disable-caching") == "true") {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    loggedIn() {
-      if (
-        window.localStorage.getItem("username") &&
-        window.localStorage.getItem("token")
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    signedInMessage() {
-      return `Hello, ${window.localStorage.getItem("username")}`;
-    },
-  },
-};
-</script>
 
+.page-editor {
+  min-width: 20rem;
+}
+
+.page-editor input:first-of-type {
+  margin-top: 0.5rem;
+}
+
+.admin {
+  margin-bottom: 1rem;
+}
+
+.editor-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  width: max-content;
+  grid-column-gap: 0.5rem;
+}
+
+.editor-header :deep(a.primary) {
+  justify-self: center;
+}
+
+.save {
+  margin-top: 1rem;
+}
+</style>
