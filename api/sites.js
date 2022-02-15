@@ -15,7 +15,9 @@ module.exports = async (req, res) => {
       }
       console.log("Connected as ID", connection.threadId);
       connection.query(
-        `SELECT * FROM users WHERE name = ${connection.escape(q.username)}`,
+        `SELECT * FROM users WHERE name = ${connection.escape(
+          decodeURIComponent(q.username)
+        )}`,
         (err, results) => {
           if (err) {
             console.error(err);
@@ -25,16 +27,19 @@ module.exports = async (req, res) => {
           if (results.length > 0) {
             let tokens = results[0].tokens;
             if (tokens.includes(q.token)) {
-              connection.query(`SELECT * FROM sites`, (err, sites) => {
-                let resArray = sites.map((v) => Object.assign({}, v));
-                resArray.forEach((site) => {
-                  site.labels = site.labels.split(",");
-                  site.labels.pop();
-                });
-                res.status(200).json({
-                  all: resArray,
-                });
-              });
+              connection.query(
+                `SELECT * FROM sites ORDER BY title`,
+                (err, sites) => {
+                  let resArray = sites.map((v) => Object.assign({}, v));
+                  resArray.forEach((site) => {
+                    site.labels = site.labels.split(",");
+                    site.labels.pop();
+                  });
+                  res.status(200).json({
+                    all: resArray,
+                  });
+                }
+              );
             } else {
               res.status(401).send(401);
             }

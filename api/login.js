@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
       connection.query(
         `SELECT * FROM users WHERE password = ${connection.escape(
           q.password
-        )} AND name = ${connection.escape(q.username)}`,
+        )} AND name = ${connection.escape(decodeURIComponent(q.username))}`,
         (err, results) => {
           if (err) {
             console.error(err);
@@ -36,7 +36,9 @@ module.exports = async (req, res) => {
             connection.query(
               `UPDATE users SET tokens = ${connection.escape(
                 tokens
-              )} WHERE name = ${connection.escape(q.username)}`
+              )} WHERE name = ${connection.escape(
+                decodeURIComponent(q.username)
+              )}`
             );
             res.status(200).json({
               token: newToken,

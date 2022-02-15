@@ -130,7 +130,7 @@ export default {
           "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important" ||
         !this.sites[index].img
       ) {
-        let res = await fetch(`/api/res?url=${url}`);
+        let res = await fetch(`/api/res?url=${encodeURIComponent(url)}`);
 
         if (res.ok) {
           let text = await res.text();
@@ -147,7 +147,7 @@ export default {
   async mounted() {
     if (this.loggedIn) {
       let sites = await fetch(
-        `https://dashboard.epicsolutions.com/api/sites?username=${window.localStorage.getItem(
+        `/api/sites?username=${window.localStorage.getItem(
           "username"
         )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
       );

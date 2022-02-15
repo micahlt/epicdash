@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
         },
       });
       const page = await context.newPage();
-      await page.goto(req.query.url);
+      await page.goto(decodeURIComponent(req.query.url));
       page.on("domcontentloaded", async () => {
         setTimeout(async () => {
           const buffer = await page.screenshot({

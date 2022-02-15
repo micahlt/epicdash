@@ -11,7 +11,7 @@
                 :options="sites"
                 @change="selectedPage = $event"
               />
-              <Button text="New Page" @click="newSite()" type="outline" />
+              <Button text="New Page" @click="newSite" type="outline" />
             </div>
             <input
               type="text"
@@ -25,7 +25,7 @@
               v-model="selectedPage.url"
               placeholder="URL"
             />
-            <Button text="Save" @click="saveChanges()" class="save" />
+            <Button text="Save" @click="saveChanges" class="save" />
           </div>
         </div>
         <div class="option">
@@ -131,7 +131,9 @@ export default {
     },
     logIn() {
       fetch(
-        `https://dashboard.epicsolutions.com/api/login?username=${this.username}&password=${this.password}`
+        `/api/login?username=${encodeURIComponent(
+          this.username
+        )}&password=${encodeURIComponent(this.password)}`
       )
         .then((res) => {
           if (res.ok) {
@@ -156,9 +158,9 @@ export default {
     async getSites() {
       console.log("getting sites");
       let sites = await fetch(
-        `https://dashboard.epicsolutions.com/api/sites?username=${window.localStorage.getItem(
-          "username"
-        )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
+        `/api/sites?username=${encodeURIComponent(
+          window.localStorage.getItem("username")
+        )}&token=${window.localStorage.getItem("token")}`
       );
       sites = await sites.json();
       this.sites = sites.all;
@@ -167,9 +169,35 @@ export default {
       console.log(e);
       const site = {
         title: "New Site",
+        new: true,
       };
       this.sites.push(site);
       this.selectedPage = site;
+    },
+    async saveChanges() {
+      if (this.selectedPage.new) {
+        let labels = ["all"],
+          labelsCsv = "";
+        labels.forEach((label) => {
+          labelsCsv += label + ",";
+        });
+        let req = await fetch(
+          `/api/add?username=${encodeURIComponent(
+            window.localStorage.getItem("username")
+          )}&token=${encodeURIComponent(
+            window.localStorage.getItem("token")
+          )}&title=${encodeURIComponent(
+            this.selectedPage.title
+          )}&url=${encodeURIComponent(
+            this.selectedPage.url
+          )}&labels=${encodeURIComponent(labelsCsv)}`
+        );
+        if (await req.ok) {
+          window.location.reload();
+        } else {
+          alert("There was an error, code", req.status);
+        }
+      }
     },
   },
   computed: {
