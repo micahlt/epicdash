@@ -1,6 +1,21 @@
 <template>
   <nav>
-    <router-link to="/" class="fab">
+    <router-link
+      to="/settings"
+      class="fab"
+      v-if="isAdmin"
+      title="Add site"
+      @mouseenter="currentIcon = 'add'"
+      @mouseleave="currentIcon = 'dash'"
+    >
+      <transition mode="out-in">
+        <span class="material-icons-outlined" v-if="currentIcon == 'dash'"
+          >space_dashboard</span
+        >
+        <span class="material-icons-outlined" v-else>add</span>
+      </transition>
+    </router-link>
+    <router-link to="/" class="fab" v-else>
       <span class="material-icons-outlined">space_dashboard</span>
     </router-link>
     <router-link
@@ -118,6 +133,16 @@ nav:hover .tab.selected span:first-child {
     margin-top: 1rem;
   }
 }
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.1s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 </style>
 <script>
 export default {
@@ -125,6 +150,7 @@ export default {
   data() {
     return {
       currentRoute: null,
+      currentIcon: "dash",
     };
   },
   mounted() {
@@ -132,6 +158,24 @@ export default {
       this.currentRoute = this.$router.currentRoute._value.fullPath;
       // this.currentRoute = this.currentRoute.slice(1, this.currentRoute.length);
     });
+  },
+  computed: {
+    isAdmin() {
+      if (window.localStorage.getItem("admin") == "true") {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
+  methods: {
+    switchIcon() {
+      if (this.currentIcon == "space_dashboard") {
+        this.currentIcon = "add_business";
+      } else {
+        this.currentIcon = "space_dashboard";
+      }
+    },
   },
 };
 </script>
