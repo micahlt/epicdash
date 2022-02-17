@@ -36,6 +36,7 @@
   box-shadow: var(--shadow-1);
   transition: box-shadow 0.2s;
   max-width: 25rem;
+  text-align: left;
 }
 
 .card:hover {

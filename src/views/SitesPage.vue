@@ -103,10 +103,13 @@ export default {
     Chip,
   },
   data() {
+    const controller = new AbortController();
     return {
       sites: [],
       interval: 0,
       selected: "all",
+      controller,
+      signal: controller.signal,
     };
   },
   methods: {
@@ -118,7 +121,9 @@ export default {
       }
     },
     go(url) {
-      window.open(url);
+      setTimeout(() => {
+        window.open(url);
+      }, 250);
     },
     async siteImage(url, index, offset) {
       if (!offset) {
@@ -130,7 +135,14 @@ export default {
           "conic-gradient(from 50deg at 47% 100%,var(--a-lighter) 0%,var(--a-light) 150%) !important" ||
         !this.sites[index].img
       ) {
-        let res = await fetch(`/api/res?url=${encodeURIComponent(url)}`);
+        let res = await fetch(
+          `${this.$api}/api/res?url=${encodeURIComponent(url)}`,
+          {
+            signal: this.signal,
+          }
+        ).catch((err) => {
+          console.log("Request aborted.");
+        });
 
         if (res.ok) {
           let text = await res.text();
@@ -147,9 +159,12 @@ export default {
   async mounted() {
     if (this.loggedIn) {
       let sites = await fetch(
-        `/api/sites?username=${window.localStorage.getItem(
+        `${this.$api}/api/sites?username=${window.localStorage.getItem(
           "username"
-        )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`
+        )}&token=${encodeURIComponent(window.localStorage.getItem("token"))}`,
+        {
+          signal: this.signal,
+        }
       );
       sites = await sites.json();
       this.sites = sites.all;
@@ -170,6 +185,7 @@ export default {
     }
   },
   beforeUnmount() {
+    this.controller.abort();
     clearInterval(this.interval);
   },
   computed: {

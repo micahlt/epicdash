@@ -32,6 +32,11 @@ a.select {
   border-radius: 0.5rem;
   text-decoration: none;
   color: var(--a-darker);
+  box-shadow: var(--shadow-1);
+}
+
+a.select:hover {
+  box-shadow: var(--shadow-2);
 }
 
 a .material-icons-outlined {
@@ -97,7 +102,7 @@ a .material-icons-outlined {
   color: var(--a-darker);
   background: var(--a-light);
   background-position: center;
-  transition: background 0.65s;
+  transition: background 0.65s, box-shadow 0.2s;
 }
 
 .select:hover {

@@ -1,9 +1,11 @@
 <script>
+import Modal from "./components/Modal.vue";
 import NavBar from "./components/NavBar.vue";
 export default {
   name: "App",
   components: {
     NavBar,
+    Modal,
   },
   methods: {
     setTheme(theme) {
@@ -46,6 +48,9 @@ export default {
 </script>
 
 <template>
+  <transition name="modal">
+    <Modal v-if="$modal.open" />
+  </transition>
   <div class="parent">
     <NavBar />
     <div class="view">
@@ -129,5 +134,15 @@ export default {
   .view {
     grid-row: 1 / 2;
   }
+}
+
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
 }
 </style>

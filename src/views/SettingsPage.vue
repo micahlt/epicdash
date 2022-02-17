@@ -9,23 +9,44 @@
               <Select
                 title="Edit page"
                 :options="sites"
-                @change="selectedPage = $event"
+                @change="
+                  selectedPage = $event;
+                  hasEdited = false;
+                "
               />
               <Button text="New Page" @click="newSite" type="outline" />
+              <a
+                @click.prevent="deleteSite"
+                href="#"
+                title="Delete site"
+                v-if="selectedPage.title != ''"
+                ><span class="material-icons-outlined delete-icon">
+                  delete
+                </span></a
+              >
             </div>
             <input
+              v-if="selectedPage.title != ''"
               type="text"
               name="title"
               v-model="selectedPage.title"
               placeholder="Title"
+              @keyup="hasEdited = true"
             />
             <input
+              v-if="selectedPage.title != ''"
               type="text"
               name="url"
               v-model="selectedPage.url"
               placeholder="URL"
+              @keyup="hasEdited = true"
             />
-            <Button text="Save" @click="saveChanges" class="save" />
+            <Button
+              v-if="hasEdited"
+              text="Save"
+              @click="saveChanges"
+              class="save"
+            />
           </div>
         </div>
         <div class="option">
@@ -74,6 +95,7 @@
   </div>
 </template>
 <script>
+import { watch } from "vue";
 import Switch from "../components/Switch.vue";
 import Button from "../components/Button.vue";
 import Card from "../components/Card.vue";
@@ -94,6 +116,7 @@ export default {
       selectedPage: {
         title: "",
       },
+      hasEdited: false,
     };
   },
   mounted() {
@@ -131,7 +154,7 @@ export default {
     },
     logIn() {
       fetch(
-        `/api/login?username=${encodeURIComponent(
+        `${this.$api}/api/login?username=${encodeURIComponent(
           this.username
         )}&password=${encodeURIComponent(this.password)}`
       )
@@ -158,7 +181,7 @@ export default {
     async getSites() {
       console.log("getting sites");
       let sites = await fetch(
-        `/api/sites?username=${encodeURIComponent(
+        `${this.$api}/api/sites?username=${encodeURIComponent(
           window.localStorage.getItem("username")
         )}&token=${window.localStorage.getItem("token")}`
       );
@@ -172,7 +195,7 @@ export default {
       };
       this.sites.push(site);
       this.selectedPage = site;
-      console.log(this.sites);
+      this.hasEdited = true;
     },
     async saveChanges() {
       let labels = ["all"],
@@ -182,7 +205,7 @@ export default {
       });
       if (this.selectedPage.new) {
         let req = await fetch(
-          `/api/add?username=${encodeURIComponent(
+          `${this.$api}/api/add?username=${encodeURIComponent(
             window.localStorage.getItem("username")
           )}&token=${encodeURIComponent(
             window.localStorage.getItem("token")
@@ -193,13 +216,29 @@ export default {
           )}&labels=${encodeURIComponent(labelsCsv)}`
         );
         if (await req.ok) {
-          window.location.reload();
+          this.$modal.title = "Success";
+          this.$modal.description =
+            "Created new site " + this.selectedPage.title;
+          this.$modal.options.primary = "Okay";
+          this.$modal.open = true;
         } else {
-          alert("There was an error, code", req.status);
+          this.$modal.title = "Error";
+          this.$modal.description = "There was an error, code " + req.status;
+          this.$modal.options.primary = "Okay";
+          this.$modal.open = true;
         }
+        watch(
+          () => this.$modal,
+          () => {
+            window.location.reload();
+          },
+          {
+            deep: true,
+          }
+        );
       } else {
         let req = await fetch(
-          `/api/update?username=${encodeURIComponent(
+          `${this.$api}/api/update?username=${encodeURIComponent(
             window.localStorage.getItem("username")
           )}&token=${encodeURIComponent(
             window.localStorage.getItem("token")
@@ -210,11 +249,73 @@ export default {
           )}&labels=${encodeURIComponent(labelsCsv)}`
         );
         if (await req.ok) {
-          alert("Successfully edited site.");
+          this.$modal.title = "Success";
+          this.$modal.description = "Successfully edited site!";
+          this.$modal.options.primary = "Okay";
+          this.$modal.open = true;
         } else {
-          alert("There was an error, code", req.status);
+          this.$modal.title = "Error";
+          this.$modal.description = "There was an error, code " + req.status;
+          this.$modal.options.primary = "Okay";
+          this.$modal.open = true;
         }
+        watch(
+          () => this.$modal,
+          () => {
+            window.location.reload();
+          },
+          {
+            deep: true,
+          }
+        );
       }
+    },
+    async deleteSite() {
+      this.$modal.title = "Warning";
+      this.$modal.description = "This entry will be permanently deleted.";
+      this.$modal.options.primary = "Okay";
+      this.$modal.options.secondary = "Cancel";
+      this.$modal.open = true;
+      let watcher = watch(
+        () => this.$modal,
+        async (newVal) => {
+          if (newVal.response == 1) {
+            let req = await fetch(
+              `${this.$api}/api/delete?username=${encodeURIComponent(
+                window.localStorage.getItem("username")
+              )}&token=${encodeURIComponent(
+                window.localStorage.getItem("token")
+              )}&id=${this.selectedPage.id}`
+            );
+            if (await req.ok) {
+              this.$modal.title = "Success";
+              this.$modal.description = "Successfully deleted site.";
+              this.$modal.options.primary = "Okay";
+              this.$modal.open = true;
+            } else {
+              this.$modal.title = "Error";
+              this.$modal.description =
+                "There was an error, code " + req.status;
+              this.$modal.options.primary = "Okay";
+              this.$modal.open = true;
+            }
+            watch(
+              () => this.$modal,
+              () => {
+                window.location.reload();
+              },
+              {
+                deep: true,
+              }
+            );
+          }
+          this.$modal.response = 0;
+          watcher();
+        },
+        {
+          deep: true,
+        }
+      );
     },
   },
   computed: {
@@ -372,13 +473,19 @@ input[type="password"]:focus-within::placeholder {
 
 .editor-header {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   width: max-content;
-  grid-column-gap: 0.5rem;
+  grid-column-gap: 0.7rem;
+  column-gap: 0.7rem;
 }
 
 .editor-header :deep(a.primary) {
   justify-self: center;
+}
+
+.delete-icon {
+  transform: translateY(0.5rem);
+  color: var(--a-light);
 }
 
 .save {

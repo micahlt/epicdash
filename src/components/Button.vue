@@ -32,26 +32,30 @@ a.primary {
   color: var(--a-darker);
   background: var(--a-light);
   background-position: center;
-  transition: background 0.65s;
+  box-shadow: var(--shadow-1);
+  transition: background 0.65s, box-shadow 0.2s;
 }
 
 a.primary:hover {
+  box-shadow: var(--shadow-2);
   background: var(--a-lighter)
     radial-gradient(circle, transparent 1%, var(--a-lighter) 1%) center/15000%;
 }
 a.primary:active {
   background-color: var(--a-light);
   background-size: 100%;
-  transition: background 0s;
+  transition: all 0s;
 }
 
 a.outline {
   border: 2px solid var(--outline);
   background-position: center;
-  transition: background 0.65s;
+  box-shadow: var(--shadow-1);
+  transition: background 0.65s, box-shadow 0.2s;
 }
 
 a.outline:hover {
+  box-shadow: var(--shadow-2);
   background: transparent
     radial-gradient(circle, transparent 1%, var(--bg-1) 1%) center/15000%;
 }

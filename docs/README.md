@@ -1,6 +1,6 @@
 # API Documentation
 
-## `/api/login`
+## `GET /api/login`
 
 Logs in a user.  Returns an object with the following structure:
 
@@ -23,7 +23,7 @@ Logs in a user.  Returns an object with the following structure:
 | `400`      | missing query param       |
 | `200`      | successful                |
 
-## `/api/authcheck`
+## `GET /api/authcheck`
 
 Verifies that a user is logged in.  Returns a status code.
 
@@ -39,7 +39,7 @@ Verifies that a user is logged in.  Returns a status code.
 | `400`      | missing query param       |
 | `200`      | user is logged in         |
 
-## `/api/sites`
+## `GET /api/sites`
 
 Gets all sites in the database.  Returns an object with the following structure:
 
@@ -66,7 +66,7 @@ Gets all sites in the database.  Returns an object with the following structure:
 | `400`      | missing query param       |
 | `200`      | successful                |
 
-## `/api/res`
+## `GET /api/res`
 
 Takes a screenshot of the specified URL.  Returns a base64-encoded JPEG.
 
@@ -80,7 +80,7 @@ Takes a screenshot of the specified URL.  Returns a base64-encoded JPEG.
 | `400`      | missing query param        |
 | `200`      | successful                 |
 
-## `/api/add`
+## `GET /api/add`
 
 Adds a new site to the database.  Returns a status code.
 
@@ -99,7 +99,7 @@ Adds a new site to the database.  Returns a status code.
 | `400`      | missing query param       |
 | `200`      | successfully inserted row |
 
-## `/api/update`
+## `GET /api/update`
 
 Edits an existing site in the database.  Returns a status code.
 
@@ -118,3 +118,20 @@ Edits an existing site in the database.  Returns a status code.
 | `401`      | invalid auth token        |
 | `400`      | missing query param       |
 | `200`      | successfully inserted row |
+
+## `GET /api/delete`
+
+Deletes an existing site from the database.  Returns a status code.
+
+| **Param** | **Value**                    |
+| --------- | ---------------------------- |
+| username  | URI-encoded username         |
+| token     | user token (from login)      |
+| id        | the ID of the site to delete |
+
+| **Status** | **Meaning**                   |
+| ---------- | ----------------------------- |
+| `500`      | error with MySQL database     |
+| `401`      | invalid auth token            |
+| `400`      | missing query param           |
+| `200`      | successfully deleted site row |
