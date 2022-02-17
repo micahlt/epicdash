@@ -142,13 +142,13 @@ export default {
       }
     },
     cacheAssets(e) {
-      if (!localStorage.getItem("disable-caching")) {
-        localStorage.setItem("disable-caching", "true");
+      if (!localStorage.getItem("nocache")) {
+        localStorage.setItem("nocache", "true");
       } else {
-        if (localStorage.getItem("disable-caching") == "true") {
-          localStorage.setItem("disable-caching", "false");
+        if (localStorage.getItem("nocache") == "true") {
+          localStorage.setItem("nocache", "false");
         } else {
-          localStorage.setItem("disable-caching", "true");
+          localStorage.setItem("nocache", "true");
         }
       }
     },

@@ -136,7 +136,11 @@ export default {
         !this.sites[index].img
       ) {
         let res = await fetch(
-          `${this.$api}/api/res?url=${encodeURIComponent(url)}`,
+          `${this.$api}/api/res?url=${encodeURIComponent(url)}${
+            window.localStorage.getItem("nocache") == "true"
+              ? "?_vercel_no_cache=1"
+              : ""
+          }`,
           {
             signal: this.signal,
           }
