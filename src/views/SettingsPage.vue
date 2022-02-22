@@ -497,9 +497,13 @@ input[type="password"]:focus-within::placeholder {
   margin-right: 0.25rem;
 }
 
-.login > :deep(a.primary) {
+.login > a.primary {
   margin: auto;
   margin-top: 1rem;
+}
+
+.login-parent .card {
+  max-width: clamp(200px, 25rem, 67vw);
 }
 
 .page-editor {
