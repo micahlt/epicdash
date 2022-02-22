@@ -9,10 +9,7 @@
               <Select
                 title="Edit page"
                 :options="sites"
-                @change="
-                  selectedPage = $event;
-                  hasEdited = false;
-                "
+                @change="selectPage($event)"
               />
               <Button text="New Page" @click="newSite" type="outline" />
               <a
@@ -26,7 +23,7 @@
               >
             </div>
             <input
-              v-if="selectedPage.title != ''"
+              v-if="selectedPage.title.length > 1"
               type="text"
               name="title"
               v-model="selectedPage.title"
@@ -34,13 +31,27 @@
               @keyup="hasEdited = true"
             />
             <input
-              v-if="selectedPage.title != ''"
+              v-if="selectedPage.title.length > 1"
               type="text"
               name="url"
               v-model="selectedPage.url"
               placeholder="URL"
               @keyup="hasEdited = true"
             />
+            <div class="labels" v-if="selectedPage.title.length > 1">
+              <Chip
+                :icon="selectedLabel == 'll' ? 'check_circle' : 'circle'"
+                text="Loyalty Lane"
+                :selected="selectedLabel == 'll'"
+                @click="selectLabel('ll')"
+              />
+              <Chip
+                text="Non-Food"
+                :icon="selectedLabel == 'nf' ? 'check_circle' : 'circle'"
+                :selected="selectedLabel == 'nf'"
+                @click="selectLabel('nf')"
+              />
+            </div>
             <Button
               v-if="hasEdited"
               text="Save"
@@ -99,6 +110,7 @@ import { watch } from "vue";
 import Switch from "../components/Switch.vue";
 import Button from "../components/Button.vue";
 import Card from "../components/Card.vue";
+import Chip from "../components/Chip.vue";
 import Select from "../components/Select.vue";
 export default {
   name: "SettingsPage",
@@ -106,6 +118,7 @@ export default {
     Switch,
     Button,
     Card,
+    Chip,
     Select,
   },
   data() {
@@ -116,6 +129,7 @@ export default {
       selectedPage: {
         title: "",
       },
+      selectedLabel: "",
       hasEdited: false,
     };
   },
@@ -125,6 +139,23 @@ export default {
     }
   },
   methods: {
+    selectLabel(opt) {
+      if (this.selectedLabel != opt) {
+        this.selectedLabel = opt;
+      } else {
+        this.selectedLabel = "all";
+      }
+      this.hasEdited = true;
+    },
+    selectPage(e) {
+      this.selectedPage = e;
+      if (this.selectedPage.labels.length > 1) {
+        this.selectLabel(this.selectedPage.labels[1]);
+      } else {
+        this.selectLabel("");
+      }
+      this.hasEdited = false;
+    },
     changeTheme(e) {
       if (!localStorage.getItem("theme")) {
         console.log("previously unset theme");
@@ -192,6 +223,7 @@ export default {
       const site = {
         title: "New Site",
         new: true,
+        labels: ["all"],
       };
       this.sites.push(site);
       this.selectedPage = site;
@@ -200,6 +232,9 @@ export default {
     async saveChanges() {
       let labels = ["all"],
         labelsCsv = "";
+      if (this.selectedLabel.length > 0) {
+        labels.push(this.selectedLabel);
+      }
       labels.forEach((label) => {
         labelsCsv += label + ",";
       });
@@ -452,6 +487,14 @@ input[type="password"]:focus-within::placeholder {
   left: -0.3rem;
   transform: scale(0.7);
   color: var(--txt-1);
+}
+
+.labels {
+  padding-top: 0.5rem;
+}
+
+:deep(.chip) {
+  margin-right: 0.25rem;
 }
 
 .login > :deep(a.primary) {
