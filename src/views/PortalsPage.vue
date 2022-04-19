@@ -9,7 +9,7 @@
         imageUrl="conic-gradient(from 50deg at 47% 100%, var(--a-lighter) 0%, var(--a-lighter) 35%, var(--a-light) 100%) !important"
         primaryOpt="Visit"
         :description="p.url"
-        @clickPrimary="go(s.url)"
+        @clickPrimary="go(p.url)"
       />
     </div>
   </div>
