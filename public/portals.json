@@ -15,6 +15,10 @@
     {
       "title": "Good Barber Admin",
       "url": "https://www.goodbarber.app/reseller/manage/"
+    },
+    {
+      "title": "Facebook Manager",
+      "url": "https://fbmanager.vercel.app/"
     }
   ]
 }
