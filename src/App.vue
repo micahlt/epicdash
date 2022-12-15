@@ -129,10 +129,10 @@ export default {
 @media only screen and (max-width: 675px) {
   .parent {
     grid-template-columns: auto;
-    grid-template-rows: auto 4.5rem;
   }
   .view {
     grid-row: 1 / 2;
+    padding-bottom: 4rem;
   }
 }
 

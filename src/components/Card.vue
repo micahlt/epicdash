@@ -67,6 +67,12 @@ p {
   grid-template-columns: auto auto;
   width: max-content;
 }
+
+@media only screen and (max-width: 675px) {
+  .card {
+    width: calc(100% - 2rem);
+  }
+}
 </style>
 
 <script>

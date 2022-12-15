@@ -56,6 +56,7 @@ nav {
   padding-top: 2rem;
   text-align: center;
   transition: background 0.2s, box-shadow 0.2s;
+  background: var(--bg-2);
 }
 
 nav:hover {
@@ -123,6 +124,9 @@ nav:hover .tab.selected span:first-child {
     grid-template-columns: auto auto auto auto;
     height: 100%;
     box-shadow: var(--shadow-1);
+    position: fixed;
+    height: 4.5rem;
+    bottom: 0;
   }
 
   .fab {
