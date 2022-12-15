@@ -7,18 +7,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@vercel/node": "^1.14.1",
+    "@vercel/node": "^1.15.4",
     "chrome-aws-lambda": "^10.1.0",
     "click-outside-vue3": "^4.0.1",
     "crypto-random-string": "^2.0.0",
     "mysql": "^2.18.1",
-    "playwright-core": "^1.21.1",
-    "vue": "^3.2.33",
-    "vue-router": "^4.0.14"
+    "playwright-core": "^1.28.1",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^2.3.1",
-    "playwright": "^1.21.1",
-    "vite": "^2.9.5"
+    "@vitejs/plugin-vue": "^2.3.4",
+    "playwright": "^1.28.1",
+    "vite": "^2.9.15"
   }
 }
